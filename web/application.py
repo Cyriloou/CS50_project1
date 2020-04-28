@@ -146,9 +146,32 @@ def search():
 
 @app.route("/books/<string:isbn>", methods=["GET", "POST"])
 def books(isbn):
-    # isLogin = session.get('user_id') == True
-    """ save book review """
+    isLogin = session.get('user_id') == True
     if request.method == 'POST':
+        """ save book review """
+        # Ensure query is entered
+        if not request.form.get("comment"):
+            return render_template("error.html", message="query not provided")
+        # Save current user info
+        currentUser = session["user_id"]
+        # Fetch form data
+        comment = request.form.get("comment")
+        try:
+            rating = int(request.form.get("rating"))
+        except ValueError:
+            return render_template("error.html", message="Invalid rating number.")
+        # Search book_id by ISBN
+        row = db.execute("SELECT id FROM books WHERE isbn = :isbn", {"isbn": isbn})
+        bookId = row.fetchone() # (id,)
+        bookId = bookId[0]
+        db.execute("INSERT INTO reviews (user_id, book_id, text, rating) VALUES \
+                    (:user_id, :book_id, :text, :rating)",
+                    {"user_id": currentUser, 
+                    "book_id": bookId, 
+                    "text": comment, 
+                    "rating": rating})
+        # Commit transactions to DB and close the connection
+        db.commit()
         return redirect("/books/"+isbn)
     else:
         """Show book page."""
@@ -170,7 +193,7 @@ def books(isbn):
         # only select relevant info
         good_books = good_books['books'][0]
 
-        return render_template("books.html", book=book, reviews=reviews)
+        return render_template("books.html", book=book, reviews=reviews, good_books=good_books, isLogin=isLogin)
 
 @app.route("/api/<int:isbn>")
 def book_api(isbn):

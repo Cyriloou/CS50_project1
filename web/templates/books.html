@@ -24,20 +24,35 @@
         <img src="..." class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{book.title}}</h5>
-            <p class="card-text">author : {{book.author}},
+            <p class="card-text">
+                author : {{book.author}},
                 <br>publication year: {{book.year}},
-                <br>ISBN number: {{book.isbn}}.</p>
+                <br>ISBN number: {{book.isbn}}.
+            </p>
+            <p class="card-text">
+                Good books rating : {{good_books.average_rating}} on {{good_books.ratings_count}} reviews
+            </p>
         </div>
         <ul class="list-group list-group-flush">
             {% for review in reviews %}
-                <li class="list-group-item">Review from {{review.username}} : {{review.text}}</li>
+                <li class="list-group-item">Review {{review.rating}} from {{review.username}} : {{review.text}}</li>
             {% else %}
                 <li class="list-group-item">Be the first leaving a review.</li>
             {% endfor %}
         </ul>
-        {% comment %} <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-        </div> {% endcomment %}
+        <form action="{{ url_for('books', isbn=book.isbn) }}" method="post">
+            <div class="form-group">
+                <label for="inputComment">Comment</label>
+                <input type="text" class="form-control" id="inputComment" name="comment" placeholder="Leave your review">
+            </div>
+            <div class="form-group">
+                <label for="inputRating">Rating</label>
+                <input class="form-control" id="inputRating" type="number" min="0" max="5" name="rating" placeholder="Leave your rating">
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary">Send</button>
+            </div>
+        </form>
     </div>
 {% endblock %}
