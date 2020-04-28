@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{book.title}}
+{% endblock %}
+
+{% block body %}
+    <h1>{{book.title}}</h1>
+    <div>
+        {% if isLogin %}
+            <li>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ url_for('login') }}">Login</a>
+            </li>
+            <li>
+                <a href="{{ url_for('register') }}">Register</a>
+            </li>
+        {% endif %}
+    </div>
+    <div class="card" style="width: 18rem;">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{book.title}}</h5>
+            <p class="card-text">author : {{book.author}},
+                <br>publication year: {{book.year}},
+                <br>ISBN number: {{book.isbn}}.</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for review in reviews %}
+                <li class="list-group-item">Review from {{review.username}} : {{review.text}}</li>
+            {% else %}
+                <li class="list-group-item">Be the first leaving a review.</li>
+            {% endfor %}
+        </ul>
+        {% comment %} <div class="card-body">
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+        </div> {% endcomment %}
+    </div>
+{% endblock %}

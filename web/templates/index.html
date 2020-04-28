@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Welcome
+{% endblock %}
+
+{% block body %}
+    <h1>Welcome</h1>
+    <ul>
+        {% if isLogin %}
+            <li>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ url_for('login') }}">Login</a>
+            </li>
+            <li>
+                <a href="{{ url_for('register') }}">Register</a>
+            </li>
+        {% endif %}
+    </ul>
+{% endblock %}

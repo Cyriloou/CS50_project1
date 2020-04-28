@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{type}}
+{% endblock %}
+
+{% block body %}
+    <h1>{{type}}</h1>
+    {% if type=="Login" %}
+        <form action="{{ url_for('login') }}" method="post">
+    {% elif type=="Register" %}
+        <form action="{{ url_for('register') }}" method="post">
+    {% else %}
+        <form method="post">
+    {% endif %}
+
+        <div class="form-group">
+            <input class="form-control" name="username" placeholder="User Name">
+        </div>
+
+        <div class="form-group">
+            <input class="form-control" name="password" type="password" placeholder="Password">
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary">{{type}}</button>
+        </div>
+
+    </form>
+{% endblock %}

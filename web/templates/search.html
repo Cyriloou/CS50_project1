@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block body %}
+    <h1>Search</h1>
+    <div>
+        {% if isLogin %}
+            <li>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ url_for('login') }}">Login</a>
+            </li>
+            <li>
+                <a href="{{ url_for('register') }}">Register</a>
+            </li>
+        {% endif %}
+    </div>
+    <form action="{{ url_for('search') }}" method="post">
+        <div class="form-group">
+            <label for="inputSearch">Search</label>
+            <input type="text" class="form-control" name="q" id="inputSearch" aria-describedby="searchHelp" placeholder="Enter search">
+            <small id="searchHelp" class="form-text text-muted">Search by ISBN number of a book, the title of a book, or the author of a book.</small>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary">Search</button>
+        </div>
+    </form>
+    <div>
+        <ul class="list-group">
+        {% for book in books %}
+            <li class="list-group-item">
+                <a href="{{ url_for('books', isbn=book.isbn) }}">
+                    {{ book.title }} from {{ book.author }}
+                </a>
+            </li>
+        {% else %}
+            <li class="list-group-item">No books founded.</li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
